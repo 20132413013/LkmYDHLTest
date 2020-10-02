@@ -1,4 +1,4 @@
-package com.lkm.lkmydhltest;
+package com.lkm.lkmydhltest.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lkm.lkmydhltest.R;
 import com.lkm.lkmydhltest.activity.LineChartActivity;
 
 import java.util.ArrayList;
@@ -55,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         objects.add(6, new ContentItem("CircleImageView"));
         objects.add(7, new ContentItem("CircleImageViewExample", "一个CircleImageView例子"));
 
+        ////
+        objects.add(8, new ContentItem("GrrenDao"));
+        objects.add(9, new ContentItem("GrrenDaoExample", "一个GrrenDao例子"));
+
         lv_main_page.setAdapter(new ListViewMainPageAdapter(this, objects));
     }
 
@@ -70,6 +76,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 i = new Intent(this, LineChartActivity.class);
                 break;
             case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                i = new Intent(this, GreenDaoActivity.class);
+                break;
+            default:
+                Toast.makeText(this, "待完善", Toast.LENGTH_SHORT).show();
                 break;
         }
 

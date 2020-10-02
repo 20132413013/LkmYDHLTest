@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
@@ -28,13 +29,16 @@ import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.lkm.lkmydhltest.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LineChartActivity extends AppCompatActivity implements OnChartValueSelectedListener {
+public class LineChartActivity extends AppCompatActivity implements OnChartValueSelectedListener, OnChartGestureListener {
 
     private static final String TAG = LineChartActivity.class.getSimpleName();
     private LineChart lc_basic;
@@ -102,6 +106,23 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
             // axis range
             yAxis.setAxisMaximum(200f);
             yAxis.setAxisMinimum(-50f);
+// 两个y轴
+//            YAxis leftAxis = chart.getAxisLeft();
+//            leftAxis.setTypeface(tfLight);
+//            leftAxis.setTextColor(ColorTemplate.getHoloBlue());
+//            leftAxis.setAxisMaximum(200f);
+//            leftAxis.setAxisMinimum(0f);
+//            leftAxis.setDrawGridLines(true);
+//            leftAxis.setGranularityEnabled(true);
+//
+//            YAxis rightAxis = chart.getAxisRight();
+//            rightAxis.setTypeface(tfLight);
+//            rightAxis.setTextColor(Color.RED);
+//            rightAxis.setAxisMaximum(900);
+//            rightAxis.setAxisMinimum(-200);
+//            rightAxis.setDrawGridLines(false);
+//            rightAxis.setDrawZeroLine(false);
+//            rightAxis.setGranularityEnabled(false);
         }
 
         setData(45, 180);
@@ -111,6 +132,12 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
 
         // get the legend (only possible after setting data)
         Legend l = lc_basic.getLegend();
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
+//        l.setTextSize(11f);
+//        l.setTextColor(Color.WHITE);
 
         // draw legend entries as lines
         l.setForm(Legend.LegendForm.LINE);
@@ -162,7 +189,7 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
                 break;
             }
             case R.id.actionToggleHighlight: {
-                if(lc_basic.getData() != null) {
+                if (lc_basic.getData() != null) {
                     lc_basic.getData().setHighlightEnabled(!lc_basic.getData().isHighlightEnabled());
                     lc_basic.invalidate();
                 }
@@ -208,7 +235,7 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.CUBIC_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.CUBIC_BEZIER);
+                            : LineDataSet.Mode.CUBIC_BEZIER);
                 }
                 lc_basic.invalidate();
                 break;
@@ -222,7 +249,7 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.STEPPED
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.STEPPED);
+                            : LineDataSet.Mode.STEPPED);
                 }
                 lc_basic.invalidate();
                 break;
@@ -236,7 +263,7 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
                     LineDataSet set = (LineDataSet) iSet;
                     set.setMode(set.getMode() == LineDataSet.Mode.HORIZONTAL_BEZIER
                             ? LineDataSet.Mode.LINEAR
-                            :  LineDataSet.Mode.HORIZONTAL_BEZIER);
+                            : LineDataSet.Mode.HORIZONTAL_BEZIER);
                 }
                 lc_basic.invalidate();
                 break;
@@ -282,6 +309,7 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
     public void onNothingSelected() {
         Log.i(TAG, "Nothing selected.");
     }
+
     private void setData(int count, float range) {
 
         ArrayList<Entry> values = new ArrayList<>();
@@ -356,5 +384,45 @@ public class LineChartActivity extends AppCompatActivity implements OnChartValue
             // set data
             lc_basic.setData(data);
         }
+    }
+
+    @Override
+    public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+        Log.i(TAG, "START, x: " + me.getX() + ", y: " + me.getY());
+    }
+
+    @Override
+    public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+        Log.i(TAG, "END, lastGesture: " + lastPerformedGesture);
+    }
+
+    @Override
+    public void onChartLongPressed(MotionEvent me) {
+        Log.i(TAG, "Chart long pressed.");
+    }
+
+    @Override
+    public void onChartDoubleTapped(MotionEvent me) {
+        Log.i(TAG, "Chart double-tapped.");
+    }
+
+    @Override
+    public void onChartSingleTapped(MotionEvent me) {
+        Log.i(TAG, "Chart single-tapped.");
+    }
+
+    @Override
+    public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+        Log.i(TAG, "Chart fling. VelocityX: " + velocityX + ", VelocityY: " + velocityY);
+    }
+
+    @Override
+    public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+        Log.i(TAG, "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
+    }
+
+    @Override
+    public void onChartTranslate(MotionEvent me, float dX, float dY) {
+        Log.i(TAG, "dX: " + dX + ", dY: " + dY);
     }
 }
